@@ -9,7 +9,7 @@ networks:
 
 services: 
   http:
-    image: ceievfa/site-static:latest
+    image: ceievfa/site-static:dev-latest
     restart: always
     labels:
       - "traefik.enable=true"
