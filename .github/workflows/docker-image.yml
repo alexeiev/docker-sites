@@ -28,5 +28,5 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          ceievfa/site-static:${{github.run_number}}
+          ceievfa/site-static:v0.${{github.run_number}}
           ceievfa/site-static:latest
