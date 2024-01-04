@@ -1,0 +1,59 @@
+version: '3.8'
+
+volumes:
+  www:
+  traefik:
+
+networks:
+  frontend:
+
+services: 
+  http:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=Host(`alexeiev.duckdns.org`)"
+      - "traefik.http.routers.wordpress.entrypoints=websecure"
+      - "traefik.http.routers.wordpress.tls.certresolver=myhttpchallenge"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=443"
+    networks: 
+      - frontend
+    volumes:
+      - www:/usr/local/apache2/htdocs/
+
+  traefik:
+    image: "traefik:v2.0.0-rc3"
+    container_name: "traefik"
+    restart: always
+    command:
+     #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker.exposedbydefault=false"
+      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
+      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
+      #- "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myhttpchallenge.acme.email=${EMAIL}"
+      - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
+      - "--providers.docker.network=frontend"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https@docker"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik:/letsencrypt
+    networks: 
+      - frontend
