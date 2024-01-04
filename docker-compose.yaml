@@ -25,7 +25,7 @@ services:
       - www:/usr/local/apache2/htdocs/
 
   traefik:
-    image: "traefik:v2.2"
+    image: "traefik:v2.10"
     container_name: "traefik"
     restart: unless-stopped
     env_file: .env
@@ -38,7 +38,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--providers.docker.exposedbydefault=false"
       - "--certificatesresolvers.myhttpchallenge.acme.tlschallenge=true" 
-      - "--certificatesresolvers.myhttpchallenge.acme.email=${MAIL}"
+      - "--certificatesresolvers.myhttpchallenge.acme.email=${EMAIL}"
       - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
       #- "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
 
@@ -54,7 +54,7 @@ services:
       - "traefik.http.routers.dashboard.rule=Host(`dash-alexeiev.duckdns.org`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$05$$b5HQEp4XObI2K5h8AEdTIu1BWbmCwXrV2Nfxwa1vfLf4vr.9mpYj2"
+      - "traefik.http.middlewares.auth.basicauth.users=${USERPWD}"
 
     ports:
       - "80:80"
