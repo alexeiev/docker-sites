@@ -4,5 +4,12 @@
 
 Create file .env in root path
 ```
-MAIL=SEU@EMAIL.COM
+EMAIL=SEU@EMAIL.COM
+USERPWD=user:passencrypted
+```
+
+### Create password for dashboard
+
+```
+docker run --rm httpd:2.4-alpine htpasswd -nbB USER PasswordForEncrypt | sed -e s/\\$/\\$\\$/g
 ```
