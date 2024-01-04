@@ -30,7 +30,6 @@ services:
     restart: unless-stopped
     env_file: .env
     command:
-     #- "--log.level=DEBUG"
       - "--api.insecure=false"
       - "--api.dashboard=true"
       - "--providers.docker=true"
@@ -41,8 +40,6 @@ services:
       - "--certificatesresolvers.myhttpchallenge.acme.tlschallenge=true" 
       - "--certificatesresolvers.myhttpchallenge.acme.email=${MAIL}"
       - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
-      #- "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
-      #- "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
       #- "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
 
     labels:
@@ -51,10 +48,7 @@ services:
       - "traefik.http.routers.http-catchall.entrypoints=web"
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https@docker"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.redirect-https.redirectScheme.permanent=true"
-
-      - "traefik.http.routers.dashboard-plain.rule=Host(`dash-alexeiev.duckdns.org`)"
-      - "traefik.http.routers.dashboard-plain.middlewares=redirect-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectScheme.permanent=true"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
       - "traefik.http.routers.dashboard.tls.certresolver=myhttpchallenge"
       - "traefik.http.routers.dashboard.rule=Host(`dash-alexeiev.duckdns.org`)"
