@@ -9,9 +9,7 @@ networks:
 
 services: 
   http:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ceievfa/site-static:latest
     restart: always
     labels:
       - "traefik.enable=true"
@@ -28,7 +26,6 @@ services:
     image: "traefik:v2.10"
     container_name: "traefik"
     restart: unless-stopped
-    env_file: .env
     command:
       - "--api.insecure=false"
       - "--api.dashboard=true"
@@ -38,7 +35,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--providers.docker.exposedbydefault=false"
       - "--certificatesresolvers.myhttpchallenge.acme.tlschallenge=true" 
-      - "--certificatesresolvers.myhttpchallenge.acme.email=${EMAIL}"
+      - "--certificatesresolvers.myhttpchallenge.acme.email=ceievfa@gmail.com"
       - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
       #- "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
 
@@ -54,7 +51,7 @@ services:
       - "traefik.http.routers.dashboard.rule=Host(`dash-alexeiev.duckdns.org`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=${USERPWD}"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$05$$b5HQEp4XObI2K5h8AEdTIu1BWbmCwXrV2Nfxwa1vfLf4vr.9mpYj2"
 
     ports:
       - "80:80"
