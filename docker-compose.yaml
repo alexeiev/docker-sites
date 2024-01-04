@@ -15,45 +15,58 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wordpress.rule=Host(`alexeiev.duckdns.org`)"
-      - "traefik.http.routers.wordpress.entrypoints=websecure"
-      - "traefik.http.routers.wordpress.tls.certresolver=myhttpchallenge"
-      - "traefik.http.services.wordpress.loadbalancer.server.port=443"
+      - "traefik.http.routers.httpd.rule=Host(`alexeiev.duckdns.org`)"
+      - "traefik.http.routers.httpd.entrypoints=websecure"
+      - "traefik.http.routers.httpd.tls.certresolver=myhttpchallenge"
+      - "traefik.http.services.httpd.loadbalancer.server.port=443"
     networks: 
       - frontend
     volumes:
       - www:/usr/local/apache2/htdocs/
 
   traefik:
-    image: "traefik:v2.0.0-rc3"
+    image: "traefik:v2.2"
     container_name: "traefik"
-    restart: always
+    restart: unless-stopped
     command:
      #- "--log.level=DEBUG"
-      - "--api.insecure=true"
+      - "--api.insecure=false"
+      - "--api.dashboard=true"
       - "--providers.docker=true"
+      - "--providers.docker.network=frontend"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--providers.docker.exposedbydefault=false"
-      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
-      - "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
-      #- "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myhttpchallenge.acme.email=${EMAIL}"
+      - "--certificatesresolvers.myhttpchallenge.acme.tlschallenge=true" 
+      - "--certificatesresolvers.myhttpchallenge.acme.email=ceievfa@gmail.com"
       - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
-      - "--providers.docker.network=frontend"
+      #- "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
+      #- "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
+      #- "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
       - "traefik.http.routers.http-catchall.entrypoints=web"
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https@docker"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-https.redirectScheme.permanent=true"
+
+      - "traefik.http.routers.dashboard-plain.rule=Host(`dash-alexeiev.duckdns.org`)"
+      - "traefik.http.routers.dashboard-plain.middlewares=redirect-https"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls.certresolver=myhttpchallenge"
+      - "traefik.http.routers.dashboard.rule=Host(`dash-alexeiev.duckdns.org`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$05$$b5HQEp4XObI2K5h8AEdTIu1BWbmCwXrV2Nfxwa1vfLf4vr.9mpYj2"
 
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "./traefik/dynamic.yml:/dynamic.yml:ro"
       - traefik:/letsencrypt
     networks: 
       - frontend
