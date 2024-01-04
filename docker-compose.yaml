@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.httpd.rule=Host(`alexeiev.duckdns.org`)"
       - "traefik.http.routers.httpd.entrypoints=websecure"
       - "traefik.http.routers.httpd.tls.certresolver=myhttpchallenge"
-      - "traefik.http.services.httpd.loadbalancer.server.port=443"
+      - "traefik.http.services.httpd.loadbalancer.server.port=80"
     networks: 
       - frontend
     volumes:
@@ -28,6 +28,7 @@ services:
     image: "traefik:v2.2"
     container_name: "traefik"
     restart: unless-stopped
+    env_file: .env
     command:
      #- "--log.level=DEBUG"
       - "--api.insecure=false"
@@ -38,7 +39,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--providers.docker.exposedbydefault=false"
       - "--certificatesresolvers.myhttpchallenge.acme.tlschallenge=true" 
-      - "--certificatesresolvers.myhttpchallenge.acme.email=ceievfa@gmail.com"
+      - "--certificatesresolvers.myhttpchallenge.acme.email=${MAIL}"
       - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
       #- "--certificatesresolvers.myhttpchallenge.acme.httpchallenge=true"
       #- "--certificatesresolvers.myhttpchallenge.acme.httpchallenge.entrypoint=web"
