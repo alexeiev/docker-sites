@@ -6,6 +6,7 @@ volumes:
 
 networks:
   frontend:
+    external: true
 
 services: 
   http:
