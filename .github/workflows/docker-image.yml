@@ -17,8 +17,8 @@ jobs:
       with:
         ref: portainer
 
-    - name:  test env DEV
-      run: bash .github/scripts/test_vars.sh
+    - name:  Build compose Vars
+      run: bash .github/scripts/build_compose_vars.sh
       env:
         TRAEFIK_USER_DASH: ${{ secrets.TRAEFIK_USER_DASH }}
         TRAEFIK_PWD_DASH: ${{ secrets.TRAEFIK_PWD_DASH }}
