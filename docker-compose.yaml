@@ -19,8 +19,6 @@ services:
       - "traefik.http.services.httpd.loadbalancer.server.port=80"
     networks: 
       - frontend
-    # volumes:
-    #   - www:/usr/local/apache2/htdocs/
 
   traefik:
     image: "traefik:v2.10"
@@ -51,7 +49,7 @@ services:
       - "traefik.http.routers.dashboard.rule=Host(`dash-alexeiev.duckdns.org`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$05$$b5HQEp4XObI2K5h8AEdTIu1BWbmCwXrV2Nfxwa1vfLf4vr.9mpYj2"
+      - "traefik.http.middlewares.auth.basicauth.users=${{ secrets.TRAEFIK_USER_DASH }}:${{ secrets.TRAEFIK_PWD_DASH }}"
 
     ports:
       - "80:80"
