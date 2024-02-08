@@ -27,6 +27,7 @@ services:
     environment:
       - TRAEFIK_USER_DASH=${TRAEFIK_USER_DASH}
       - TRAEFIK_PWD_DASH=${TRAEFIK_PWD_DASH}
+      - TRAEFIK_MAIL=${TRAEFIK_MAIL}
     command:
       - "--api.insecure=false"
       - "--api.dashboard=true"
@@ -36,7 +37,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--providers.docker.exposedbydefault=false"
       - "--certificatesresolvers.myhttpchallenge.acme.tlschallenge=true" 
-      - "--certificatesresolvers.myhttpchallenge.acme.email=ceievfa@gmail.com"
+      - "--certificatesresolvers.myhttpchallenge.acme.email=${TRAEFIK_MAIL}"
       - "--certificatesresolvers.myhttpchallenge.acme.storage=/letsencrypt/acme.json"
       #- "--certificatesresolvers.myhttpchallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
 
