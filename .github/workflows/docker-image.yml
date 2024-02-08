@@ -23,8 +23,10 @@ jobs:
     #  run: |
     #    echo $USER_DASH
     - name: DEBUG env
+      env:
+        TRAEFIK_USER_DASH: ${{ secrets.TRAEFIK_USER_DASH }}
       run: |
-        echo "$GITHUB_REPOSITORY"
+        echo "$TRAEFIK_USER_DASH"
         echo "$GITHUB_CONTEXT"
       
     - name: autenticate dokcer register
