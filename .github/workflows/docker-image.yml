@@ -24,7 +24,7 @@ jobs:
     #    echo $USER_DASH
     - name: DEBUG env
       run: |
-        echo "$GITHUB_REPOSITORY_OWNER"
+        echo "$GITHUB_REPOSITORY"
         echo "$GITHUB_CONTEXT"
       
     - name: autenticate dokcer register
