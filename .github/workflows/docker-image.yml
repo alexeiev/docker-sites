@@ -17,8 +17,11 @@ jobs:
       with:
         ref: portainer
 
-    - name: DEBUG find name jose
-      run: echo ${{ secrets.TRAEFIK_USER_DASH }}
+    - shell: bash
+      env:
+        USER_DASH: ${{ secrets.TRAEFIK_USER_DASH }}
+      run: |
+        echo $USER_DASH
         
     - name: autenticate dokcer register
       uses: docker/login-action@v3.0.0
