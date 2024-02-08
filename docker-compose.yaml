@@ -3,6 +3,7 @@ version: '3.8'
 volumes:
   www:
   traefik:
+    external: true
 
 networks:
   frontend:
