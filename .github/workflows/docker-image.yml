@@ -23,9 +23,12 @@ jobs:
         TRAEFIK_PWD_DASH: ${{ secrets.TRAEFIK_PWD_DASH }}
         TRAEFIK_MAIL: ${{ secrets.TRAEFIK_MAIL }}
       run: |
-        echo "$TRAEFIK_USER_DASH"
-        echo "$TRAEFIK_PWD_DASH"
-        echo "$TRAEFIK_MAIL"
+        echo "$TRAEFIK_USER_DASH" >> tmpfile.txt
+        echo "$TRAEFIK_PWD_DASH"  >> tmpfile.txt
+        echo "$TRAEFIK_MAIL"      >> tmpfile.txt
+    
+    - name:  read file tmpfile
+      run: cat tmpfile.txt
       
     - name: autenticate dokcer register
       uses: docker/login-action@v3.0.0
