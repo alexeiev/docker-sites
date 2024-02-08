@@ -1,8 +1,6 @@
 version: '3.8'
 
 volumes:
-  www:
-    external: true
   traefik:
 
 networks:
@@ -21,8 +19,8 @@ services:
       - "traefik.http.services.httpd.loadbalancer.server.port=80"
     networks: 
       - frontend
-    volumes:
-      - www:/usr/local/apache2/htdocs/
+    # volumes:
+    #   - www:/usr/local/apache2/htdocs/
 
   traefik:
     image: "traefik:v2.10"
