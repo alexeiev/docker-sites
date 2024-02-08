@@ -25,8 +25,8 @@ services:
     container_name: "traefik"
     restart: unless-stopped
     environment:
-      - TRAEFIK_USER_DASH=${TRAEFIK_TMP_USER_DASH}
-      - TRAEFIK_PWD_DASH=${TRAEFIK_TMP_PWD_DASH}
+      - TRAEFIK_USER_DASH=${TRAEFIK_USER_DASH}
+      - TRAEFIK_PWD_DASH=${TRAEFIK_PWD_DASH}
       - TRAEFIK_MAIL=${TRAEFIK_MAIL}
     command:
       - "--api.insecure=false"
