@@ -47,10 +47,10 @@ jobs:
         user: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
         first_ssh: |
-          test -d /app/cicd && (bash /app/cicd/service.sh stop && rm -rf /app/cicd/) || mkdir -p /app/cicd
+          test -d /app/cicd && bash /app/cicd/service.sh stop && rm -rf /app/cicd/ || mkdir -p /app/cicd
         scp: |
           ./docker-compose.yaml => /app/cicd/
           .github/scripts/service.sh => /app/cicd/
         last_ssh: |
           bash /app/cicd/service.sh start
-          docker ps
+          docker compose ls
