@@ -48,12 +48,11 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         first_ssh: |
           bash /app/cicd/service.sh stop || true 
-          rm -rf /app/cicd/ || true
-          mkdir -p /app/cicd
+          rm -rf /app/cicd/* || true
         scp: |
           ./docker-compose.yaml => /app/cicd/
           .github/scripts/service.sh => /app/cicd/
         last_ssh: |
-          bash /app/cicd/service.sh start
-          docker compose ls
+          bash /app/cicd/service.sh start || true
+          docker compose ls | grep site-static |grep running || exit 1
 
