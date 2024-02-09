@@ -63,5 +63,5 @@ jobs:
         scp: |
           ./docker-compose.yaml => /app/
         last_ssh: |
-          bash start.sh
+          bash /app/start.sh
           docker ps
