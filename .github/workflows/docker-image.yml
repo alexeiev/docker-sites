@@ -66,5 +66,5 @@ jobs:
           ./docker-compose.yaml => /app/cicd/
           .github/scripts/start.sh => /app/cicd/
         last_ssh: |
-          bash /app/start.sh
+          bash /app/cicd/start.sh
           docker ps
