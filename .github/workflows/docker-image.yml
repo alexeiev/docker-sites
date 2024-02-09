@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  CI-DEV:
+  CI_CD-DEV:
 
     runs-on: ubuntu-latest
     environment: dev
@@ -17,13 +17,6 @@ jobs:
       with:
         ref: portainer
 
-    - name:  Build compose Vars
-      run: bash .github/scripts/build_compose_vars.sh
-      env:
-        TRAEFIK_USER_DASH: ${{ secrets.TRAEFIK_USER_DASH }}
-        TRAEFIK_PWD_DASH: ${{ secrets.TRAEFIK_PWD_DASH }}
-        TRAEFIK_MAIL: ${{ secrets.TRAEFIK_MAIL }}
-      
     - name: autenticate dokcer register
       uses: docker/login-action@v3.0.0
       with:
@@ -39,3 +32,12 @@ jobs:
         tags: |
           ceievfa/site-static:dev-0.${{github.run_number}}
           ceievfa/site-static:dev-latest
+    
+    - name:  Build compose Vars
+      run: bash .github/scripts/build_compose_vars.sh
+      env:
+        TRAEFIK_USER_DASH: ${{ secrets.TRAEFIK_USER_DASH }}
+        TRAEFIK_PWD_DASH: ${{ secrets.TRAEFIK_PWD_DASH }}
+        TRAEFIK_MAIL: ${{ secrets.TRAEFIK_MAIL }}
+        DOCKER_ID: ${{ secrets.DOCKER_ID }}
+      
