@@ -59,9 +59,12 @@ jobs:
         # pass: ${{ secrets.SSH_PASS }}
         key: ${{ secrets.SSH_KEY }}
         first_ssh: |
-          test -e /app/docker-compose.yaml && rm -f /app/docker-compose.yaml
+          test -e /app/cicd || mkdir -p /app/cicd
+          test -e /app/cicddocker-compose.yaml && rm -f /app/cicd/docker-compose.yaml
+          test -e /app/cicd && rm -f /app/docker-compose.yaml
         scp: |
-          ./docker-compose.yaml => /app/
+          ./docker-compose.yaml => /app/cicd/
+          .github/scripts/start.sh => /app/cicd/
         last_ssh: |
           bash /app/start.sh
           docker ps
