@@ -58,8 +58,10 @@ jobs:
         user: ${{ secrets.SSH_USER }}
         # pass: ${{ secrets.SSH_PASS }}
         key: ${{ secrets.SSH_KEY }}
+        first_ssh: |
+          test -e /app/docker-compose.yaml && rm -f /app/docker-compose.yaml
         scp: |
           ./docker-compose.yaml => /app/
         last_ssh: |
-          test -e /app/docker-compose.yaml && 
           docker compose -f /app/docker-compose.yaml -p site-static up -d
+          docker ps
