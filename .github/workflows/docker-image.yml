@@ -54,3 +54,4 @@ jobs:
         last_ssh: |
           bash /app/cicd/service.sh start
           docker compose ls
+          
