@@ -7,6 +7,14 @@ networks:
   frontend:
     external: true
 
+secrets:
+  TRAEFIK_MAIL:
+    external: true
+  TRAEFIK_USER_DASH:
+    external: true
+  TRAEFIK_PWD_DASH:
+    external: true
+
 services: 
   http:
     image: ceievfa/site-static:dev-latest
