@@ -4,11 +4,11 @@ on:
   push:
     branches: [ "portainer" ]
   pull_request:
-    branches: [ "portainer" ]
+    branches: [ "main" ]
 
 jobs:
 
-  CI_CD-DEV:
+  CI_CD:
 
     runs-on: ubuntu-latest
     
